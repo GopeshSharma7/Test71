@@ -1,0 +1,156 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/containerID: 2421391547c3858f49d1141a98759553dbe6730a2fded99d1232c0741e544498
+    cni.projectcalico.org/podIP: 10.244.100.226/32
+    cni.projectcalico.org/podIPs: 10.244.100.226/32
+    k8s.v1.cni.cncf.io/network-status: |-
+      [{
+          "name": "k8s-pod-network",
+          "ips": [
+              "10.244.100.226"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+    k8s.v1.cni.cncf.io/networks-status: |-
+      [{
+          "name": "k8s-pod-network",
+          "ips": [
+              "10.244.100.226"
+          ],
+          "default": true,
+          "dns": {}
+      }]
+  creationTimestamp: "2024-01-31T10:40:32Z"
+  generateName: katafygio-859f9c6979-
+  labels:
+    app: katafygio
+    chart: katafygio-0.5.1
+    heritage: Helm
+    pod-template-hash: 859f9c6979
+    release: katafygio
+  name: katafygio-859f9c6979-btzfh
+  namespace: default
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: katafygio-859f9c6979
+    uid: 35bef7c0-6505-43ab-8303-38afb784f271
+spec:
+  containers:
+  - args:
+    - --healthcheck-port=8080
+    - --log-level=info
+    - --log-output=stdout
+    - --resync-interval=300
+    - --exclude-kind=replicasets
+    - --exclude-kind=endpoints
+    - --exclude-kind=events
+    image: svl-artifactory.juniper.net/atom-docker/cn2/sharmag07/katafygio:y8
+    imagePullPolicy: Always
+    name: katafygio
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/lib/katafygio
+      name: katafygio-data
+    - mountPath: /etc/katafygio
+      name: config-volume
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-2t48w
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: sharmag-k8s-master-pnad30.englab.juniper.net
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 65534
+    runAsGroup: 65534
+    runAsUser: 65534
+  serviceAccount: katafygio
+  serviceAccountName: katafygio
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: katafygio-data
+    persistentVolumeClaim:
+      claimName: katafygio
+  - configMap:
+      defaultMode: 420
+      name: katafygio-config
+    name: config-volume
+  - name: kube-api-access-2t48w
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2024-01-31T10:40:32Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2024-01-31T10:40:33Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2024-01-31T10:40:33Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2024-01-31T10:40:32Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: cri-o://09178901f734edf3a37a7702feff903e2c9f446e40df56a2c64c4d2b8e53b45b
+    image: svl-artifactory.juniper.net/atom-docker/cn2/sharmag07/katafygio:y8
+    imageID: 02194ff3f9b16407dce379f6052b3f00c28d01d03fb502b75d12ebc5245ab582
+    lastState: {}
+    name: katafygio
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2024-01-31T10:40:32Z"
+  hostIP: 192.168.1.2
+  phase: Running
+  podIP: 10.244.100.226
+  podIPs:
+  - ip: 10.244.100.226
+  qosClass: BestEffort
+  startTime: "2024-01-31T10:40:32Z"
